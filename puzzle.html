@@ -73,7 +73,7 @@
 <div class="wrap">
   <a class="backlink" href="index.html">← Zurück zum Comic</a>
   <div class="intro">
-    Every riddle hides one star from the big match — write the surname into the boxes.
+    Take the players of both teams and solve the crossword puzzle! Every riddle hides one star from the big match — write the surname into the boxes.
     Eleven of them have a <span class="g">gold square</span> numbered <b>1–11</b>: collect those letters
     in order into the strip at the bottom and they reveal <b>what your birthday voucher is for!</b> 🎁<br><br>
     A few players are <b style="color:#2a7bff">guest legends</b> — no gold square, just there for the fun of spotting them.
@@ -98,22 +98,22 @@
 <script>
   // hi = index of the gold letter (-1 = guest legend, no gold square)
   const ENTRIES = [
-    {a:"SINNER",      hi:0,  clue:"An ice-cool Italian, the racket's number one, / a calm red-haired master who's bothered by none."},
-    {a:"MBAPPE",      hi:3,  clue:"A blue-shirted rocket with frightening pace — / one blink and he's already won you the race."},
+    {a:"SINNER",      hi:0,  clue:"Ice-cool Italian, the world's number one, / a calm red-haired carrot who panics to none."},
+    {a:"MBAPPE",      hi:3,  clue:"A blue-shaded rocket with frightening pace, / one blink and he's already won you the race."},
     {a:"RONALDO",     hi:-1, clue:"He leaps to the heavens and bellows his 'SIUU', / with more goals than nearly a century knew."},
     {a:"OLISE",       hi:0,  clue:"With silky-smooth feet and free-kicks that bend — / for Munich he dazzles, French blue he'll defend."},
-    {a:"MAYUR",       hi:4,  bday:true, clue:"The birthday boy-captain, a racket in hand, / soft as a feather, the best in the land. / He reads his opponent before they have shown — / one minute of warm-up, the game is his own."},
+    {a:"MAYUR",       hi:4,  bday:true, clue:"The birthday boy-captain, a racket in hand, / moves soft as a feather, predicting his game I can't."},
     {a:"WIRTZ",       hi:3,  clue:"A dazzling young German who slides the right pass, / gliding like sunlight that streams over glass."},
-    {a:"MUSIALA",     hi:2,  clue:"The joy-bringer dancing past three in a row, / a grin and a shimmy, then off he will go."},
+    {a:"MUSIALA",     hi:2,  clue:"The joy-bringer dancing past three in a row, / again and again, then off he will go."},
     {a:"KIMMICH",     hi:-1, clue:"The tireless commander who drives the whole side, / with pinpoint long passes that carve the pitch wide."},
-    {a:"NEUER",       hi:1,  clue:"The veteran keeper, with gloves, guards the back, / then charges his box like he's joined the attack."},
-    {a:"DJOKOVIC",    hi:5,  clue:"A rubber-band champion with nerves made of steel, / the racket's record-breaker who never will kneel."},
-    {a:"MUELLER",     hi:2,  clue:"A grinning 'space-reader', not quickest, it's true — / yet somehow he's there when the ball's falling through."},
-    {a:"KANE",        hi:2,  clue:"England's bold number nine, a marksman so keen, / he drops, threads a pass, then pops up on the scene."},
+    {a:"NEUER",       hi:1,  clue:"The veteran keeper in gloves at the back, / who races from goal like he's joined the attack."},
+    {a:"DJOKOVIC",    hi:5,  clue:"A rubber-band champion with nerves made of steel, / the record-breaker who bends but won't kneel."},
+    {a:"MUELLER",     hi:2,  clue:"A grinning Raumdeuter, not the quickest, it's true, / yet somehow he's there when the ball's falling through."},
+    {a:"KANE",        hi:2,  clue:"England's bold number 9, a marksman so keen, / he drops, threads a pass, then pops up on the scene."},
     {a:"WOLTEMADE",   hi:-1, clue:"A towering young striker, near two metres tall, / yet gentle of touch as he glides past them all."},
     {a:"WAKABAYASHI", hi:-1, clue:"From legendary comics, a keeper, a wall, / his goal is a fortress that lets in none at all."},
     {a:"KARL",        hi:-1, clue:"The teenage sensation from Munich so bright, / the youngest of stars, setting wings alight."},
-    {a:"TSUBASA",     hi:0,  clue:"A hero of legend from comic-book lore — / 'the ball is my friend', and he'll always want more."},
+    {a:"TSUBASA",     hi:0,  clue:"A hero of legend from Japanese comic-book lore, / the ball is my friend and he'll always want more."},
   ];
 
   const TARGET = "SPORTSEVENT";

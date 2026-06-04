@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wer ist wer? – Mayur's Player Puzzle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --ink:#14110f; --gold:#ffcc00; --red:#d7141a; --blue:#2a7bff; --paper:#fbf7ee; --line:#d9d1c1; --muted:#6b6256; }
+  *{box-sizing:border-box}
+  body{margin:0;background:#1b1d22;color:var(--ink);font-family:"Baloo 2",sans-serif;padding:0 0 70px}
+  .wrap{max-width:740px;margin:0 auto;padding:16px}
+  header{background:linear-gradient(180deg,#14110f,#26211b);border-bottom:6px solid var(--gold);
+    padding:24px 18px;text-align:center;color:#fff}
+  .flag{height:8px;display:flex;max-width:240px;margin:0 auto 12px;border-radius:4px;overflow:hidden}
+  .flag i{flex:1}.flag .b{background:#1a1a1a}.flag .r{background:var(--red)}.flag .g{background:var(--gold)}
+  header h1{font-family:"Anton";font-size:clamp(26px,7vw,44px);margin:0;color:var(--gold);text-shadow:3px 3px 0 #000;letter-spacing:1px}
+  header p{font-family:"Bungee";font-size:12px;margin:8px 0 0;letter-spacing:1px}
+  .intro{background:var(--paper);border-radius:14px;padding:16px;margin:16px 0;font-size:14px;line-height:1.5}
+  .intro b{color:var(--red)} .intro .g{color:#9a6b00;font-weight:800}
+  .bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+  .bar button{font-family:"Baloo 2";font-weight:800;font-size:14px;border:none;border-radius:999px;
+    padding:9px 18px;cursor:pointer;background:var(--gold);color:#14110f;box-shadow:0 4px 0 #b58f00}
+  .bar button.alt{background:#fff;box-shadow:0 4px 0 #c9c1b2}
+  .bar button:active{transform:translateY(3px);box-shadow:none}
+  .entry{background:var(--paper);border-radius:14px;padding:13px 14px 15px;margin:11px 0;box-shadow:0 5px 16px rgba(0,0,0,.28)}
+  .entry.guest{background:#f1eee6;border:1px dashed #c7bda9}
+  .clue{display:flex;gap:10px;align-items:flex-start;margin-bottom:9px}
+  .num{font-family:"Anton";background:var(--ink);color:var(--gold);min-width:32px;height:32px;border-radius:50%;
+    display:grid;place-items:center;font-size:16px;flex:0 0 auto}
+  .clue p{margin:0;font-size:14px;font-style:italic;color:#3a342c;line-height:1.45}
+  .tag{display:inline-block;font-family:"Bungee";font-size:8.5px;letter-spacing:.5px;padding:3px 8px;border-radius:999px;margin-left:4px;font-style:normal;vertical-align:middle}
+  .tag.star{background:var(--blue);color:#fff}
+  .tag.bday{background:var(--red);color:#fff}
+  .boxes{display:flex;gap:5px;flex-wrap:wrap;padding-left:42px}
+  .cell{position:relative;width:34px;height:40px}
+  .cell input{width:100%;height:100%;text-align:center;font-family:"Anton";font-size:20px;text-transform:uppercase;
+    border:2.5px solid var(--ink);border-radius:7px;background:#fff;color:var(--ink);padding:0}
+  .cell.sol input{background:var(--gold);border-color:#9a6b00}
+  .cell .badge{position:absolute;top:-9px;left:-7px;background:var(--gold);color:#14110f;border:2px solid #14110f;
+    font-family:"Baloo 2";font-weight:800;font-size:10px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;z-index:2}
+  .solution{background:#14110f;border-radius:16px;padding:18px;margin:22px 0;text-align:center;color:#fff}
+  .solution h2{font-family:"Bungee";font-size:14px;color:var(--gold);margin:0 0 12px;letter-spacing:1px}
+  .strip{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+  .strip .gap{width:14px}
+  .scell{position:relative;width:34px;height:42px;border:2.5px solid var(--gold);border-radius:7px;background:#2a2520;color:var(--gold);
+    font-family:"Anton";font-size:22px;display:grid;place-items:center}
+  .scell .n{position:absolute;top:-9px;left:-6px;background:var(--gold);color:#14110f;font-family:"Baloo 2";font-weight:800;
+    font-size:10px;width:17px;height:17px;border-radius:50%;display:grid;place-items:center}
+  .reveal{margin-top:14px;font-family:"Anton";font-size:clamp(18px,5.5vw,28px);color:var(--gold);min-height:28px;
+    opacity:0;transition:opacity .4s;text-shadow:2px 2px 0 #000}
+  .reveal.show{opacity:1}
+  footer{text-align:center;color:#8a8378;font-size:12px;margin-top:18px}
+  .backlink{display:inline-block;margin:0 0 4px;font-family:"Bungee";font-size:11px;letter-spacing:.5px;
+    text-decoration:none;color:#14110f;background:var(--gold);border-radius:999px;padding:9px 18px;box-shadow:0 4px 0 #b58f00}
+  .backlink:active{transform:translateY(2px)}
+  @media print{
+    body{background:#fff;padding:0}.bar{display:none}.entry,.intro,.solution{box-shadow:none}
+    .solution{background:#fff;color:#000;border:2px solid #000}.scell{background:#fff;color:#000;border-color:#000}
+    .scell .n{background:#000;color:#fff}.reveal{display:none}@page{margin:10mm}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="flag"><i class="b"></i><i class="r"></i><i class="g"></i></div>
+  <h1>WER IST WER?</h1>
+  <p>MAYUR'S ALL-STAR PUZZLE · NAME THEM ALL</p>
+</header>
+
+<div class="wrap">
+  <a class="backlink" href="index.html">← Zurück zum Comic</a>
+  <div class="intro">
+    Every riddle hides one star from the big match — write the surname into the boxes.
+    Eleven of them have a <span class="g">gold square</span> numbered <b>1–11</b>: collect those letters
+    in order into the strip at the bottom and they reveal <b>what your birthday voucher is for!</b> 🎁<br><br>
+    A few players are <b style="color:#2a7bff">guest legends</b> — no gold square, just there for the fun of spotting them.
+  </div>
+
+  <div class="bar">
+    <button class="alt" onclick="reveal()" id="rev">🔑 Reveal answers</button>
+    <button onclick="window.print()">🖨️ Print</button>
+  </div>
+
+  <div id="puzzle"></div>
+
+  <div class="solution">
+    <h2>★ THE GIFT — READ THE GOLD SQUARES 1 → 11 ★</h2>
+    <div class="strip" id="strip"></div>
+    <div class="reveal" id="finalReveal"></div>
+  </div>
+
+  <footer>For Mayur · 15 · Happy Birthday, Captain 🏆</footer>
+</div>
+
+<script>
+  // hi = index of the gold letter (-1 = guest legend, no gold square)
+  const ENTRIES = [
+    {a:"SINNER",      hi:0,  clue:"An ice-cool Italian, the racket's number one, / a calm red-haired master who's bothered by none."},
+    {a:"MBAPPE",      hi:3,  clue:"A blue-shirted rocket with frightening pace — / one blink and he's already won you the race."},
+    {a:"RONALDO",     hi:-1, clue:"He leaps to the heavens and bellows his 'SIUU', / with more goals than nearly a century knew."},
+    {a:"OLISE",       hi:0,  clue:"With silky-smooth feet and free-kicks that bend — / for Munich he dazzles, French blue he'll defend."},
+    {a:"MAYUR",       hi:4,  bday:true, clue:"The birthday boy-captain, a racket in hand, / soft as a feather, the best in the land. / He reads his opponent before they have shown — / one minute of warm-up, the game is his own."},
+    {a:"WIRTZ",       hi:3,  clue:"A dazzling young German who slides the right pass, / gliding like sunlight that streams over glass."},
+    {a:"MUSIALA",     hi:2,  clue:"The joy-bringer dancing past three in a row, / a grin and a shimmy, then off he will go."},
+    {a:"KIMMICH",     hi:-1, clue:"The tireless commander who drives the whole side, / with pinpoint long passes that carve the pitch wide."},
+    {a:"NEUER",       hi:1,  clue:"The veteran keeper, with gloves, guards the back, / then charges his box like he's joined the attack."},
+    {a:"DJOKOVIC",    hi:5,  clue:"A rubber-band champion with nerves made of steel, / the racket's record-breaker who never will kneel."},
+    {a:"MUELLER",     hi:2,  clue:"A grinning 'space-reader', not quickest, it's true — / yet somehow he's there when the ball's falling through."},
+    {a:"KANE",        hi:2,  clue:"England's bold number nine, a marksman so keen, / he drops, threads a pass, then pops up on the scene."},
+    {a:"WOLTEMADE",   hi:-1, clue:"A towering young striker, near two metres tall, / yet gentle of touch as he glides past them all."},
+    {a:"WAKABAYASHI", hi:-1, clue:"From legendary comics, a keeper, a wall, / his goal is a fortress that lets in none at all."},
+    {a:"KARL",        hi:-1, clue:"The teenage sensation from Munich so bright, / the youngest of stars, setting wings alight."},
+    {a:"TSUBASA",     hi:0,  clue:"A hero of legend from comic-book lore — / 'the ball is my friend', and he'll always want more."},
+  ];
+
+  const TARGET = "SPORTSEVENT";
+  const puzzle = document.getElementById("puzzle");
+  const stripEl = document.getElementById("strip");
+  const solCells = [];
+
+  // solution strip: 6 + gap + 5, numbered 1..11
+  for(let i=0;i<11;i++){
+    if(i===6){const g=document.createElement("div");g.className="gap";stripEl.appendChild(g);}
+    const c=document.createElement("div");c.className="scell";
+    const n=document.createElement("div");n.className="n";n.textContent=i+1;c.appendChild(n);
+    stripEl.appendChild(c);solCells.push(c);
+  }
+
+  let solCounter = 0;
+  ENTRIES.forEach((e,idx)=>{
+    const wrap=document.createElement("div");
+    wrap.className = "entry" + (e.hi<0 ? " guest" : "");
+    const clue=document.createElement("div");clue.className="clue";
+    let tag = e.bday ? '<span class="tag bday">★ BIRTHDAY CAPTAIN</span>'
+             : (e.hi<0 ? '<span class="tag star">★ GUEST LEGEND</span>' : '');
+    clue.innerHTML = `<div class="num">${idx+1}</div><p>${e.clue.replace(/ \/ /g,"<br>")} ${tag}</p>`;
+    wrap.appendChild(clue);
+
+    const boxes=document.createElement("div");boxes.className="boxes";
+    let solPos = -1;
+    if(e.hi>=0){ solPos = solCounter; solCounter++; }
+    for(let i=0;i<e.a.length;i++){
+      const cell=document.createElement("div");cell.className="cell";
+      const inp=document.createElement("input");inp.maxLength=1;
+      if(i===e.hi){
+        cell.classList.add("sol");
+        inp.dataset.sol=solPos;
+        const b=document.createElement("div");b.className="badge";b.textContent=solPos+1;cell.appendChild(b);
+      }
+      inp.addEventListener("input",onType);
+      inp.addEventListener("keydown",onKey);
+      cell.appendChild(inp);boxes.appendChild(cell);
+    }
+    wrap.appendChild(boxes);puzzle.appendChild(wrap);
+  });
+
+  function onType(ev){
+    const inp=ev.target;inp.value=inp.value.toUpperCase();
+    if(inp.dataset.sol!==undefined){ setSol(+inp.dataset.sol, inp.value); checkWin(); }
+    if(inp.value){ const n=nextInput(inp); if(n)n.focus(); }
+  }
+  function setSol(pos,val){
+    const cell=solCells[pos];
+    // keep the little number badge, set the letter text
+    cell.childNodes.forEach(n=>{ if(n.nodeType===3) n.remove(); });
+    cell.appendChild(document.createTextNode(val));
+  }
+  function onKey(ev){
+    if(ev.key==="Backspace" && !ev.target.value){ const p=prevInput(ev.target); if(p) p.focus(); }
+  }
+  function nextInput(inp){ const a=[...document.querySelectorAll("#puzzle input")];return a[a.indexOf(inp)+1]; }
+  function prevInput(inp){ const a=[...document.querySelectorAll("#puzzle input")];return a[a.indexOf(inp)-1]; }
+
+  function checkWin(){
+    const got=solCells.map(c=>c.textContent.replace(/[0-9]/g,"")).join("");
+    const fr=document.getElementById("finalReveal");
+    if(got===TARGET){ fr.textContent="🎉 A VOUCHER FOR A SPORTS EVENT! 🎉"; fr.classList.add("show"); }
+    else fr.classList.remove("show");
+  }
+
+  let revealed=false;
+  function reveal(){
+    const inputs=[...document.querySelectorAll("#puzzle input")];
+    if(!revealed){
+      let k=0;
+      ENTRIES.forEach(e=>{ for(const ch of e.a){ inputs[k].value=ch; if(inputs[k].dataset.sol!==undefined) setSol(+inputs[k].dataset.sol,ch); k++; } });
+      checkWin(); document.getElementById("rev").textContent="🧽 Clear";
+    } else {
+      inputs.forEach(i=>i.value="");
+      solCells.forEach(c=>{ c.childNodes.forEach(n=>{ if(n.nodeType===3) n.remove(); }); });
+      document.getElementById("finalReveal").classList.remove("show");
+      document.getElementById("rev").textContent="🔑 Reveal answers";
+    }
+    revealed=!revealed;
+  }
+</script>
+</body>
+</html>
